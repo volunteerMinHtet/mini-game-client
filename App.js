@@ -1,21 +1,36 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from "react";
+import { Provider } from "react-redux"; // redux state provider
+import { useFonts } from "expo-font";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import configureStore from "./src/state/store"; // redux store
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import { sounds } from "./src/state/sound/soundConstant";
+import { playSound } from "./src/state/sound/soundActions"; // redux sound actions to dispatch
+
+import RootNavigator from "./src/Navigator";
+
+const store = configureStore(); // make store('global-state') variable
+
+const App = () => {
+	React.useEffect(() => {
+		store.dispatch(playSound(sounds.BACKGROUND_THEME_SOUND)); // dispatch playSound action to play song for app
+	}, []);
+
+	const [loaded] = useFonts({
+		"Roboto-Black": require("./assets/fonts/Roboto-Black.ttf"),
+		"Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+		"Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+	}); // use custom fonts
+
+	if (!loaded) {
+		return null;
+	}
+
+	return (
+		<Provider store={store}>
+			<RootNavigator />
+		</Provider>
+	);
+};
+
+export default App;
