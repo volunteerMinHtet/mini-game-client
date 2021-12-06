@@ -7,13 +7,14 @@ import configureStore from "./src/state/store"; // redux store
 import { sounds } from "./src/state/sound/soundConstant";
 import { playSound } from "./src/state/sound/soundActions"; // redux sound actions to dispatch
 
-import RootNavigator from "./src/Navigator";
+// import RootNavigator from "./src/Navigator";
+import RootNavigator from "./src/screens/RootNavigator";
 
 const store = configureStore(); // make store('global-state') variable
 
 const App = () => {
 	React.useEffect(() => {
-		store.dispatch(playSound(sounds.BACKGROUND_THEME_SOUND)); // dispatch playSound action to play song for app
+		// store.dispatch(playSound(sounds.BACKGROUND_THEME_SOUND)); // dispatch playSound action to play song for app
 	}, []);
 
 	const [loaded] = useFonts({
@@ -28,6 +29,7 @@ const App = () => {
 
 	return (
 		<Provider store={store}>
+			{/* <RootNavigator /> */}
 			<RootNavigator />
 		</Provider>
 	);
