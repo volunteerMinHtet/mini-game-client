@@ -6,19 +6,14 @@ import SignUpCompleteScreen from "./SignUpCompleteScreen";
 
 const Stack = createNativeStackNavigator();
 
-const SignUpNavigator = () => {
-	return (
-		<Stack.Navigator screenOptions={{ headerShown: false }}>
-			<Stack.Screen
-				name="SignUp/PlayerName"
-				component={SignUpPlayerNameScreen}
-			/>
-			<Stack.Screen
-				name="SignUp/Complete"
-				component={SignUpCompleteScreen}
-			/>
-		</Stack.Navigator>
-	);
-};
+const signUpNavigator = (
+	<Stack.Group screenOptions={{ headerShown: false }}>
+		<Stack.Screen
+			name="SignUp/PlayerName"
+			component={SignUpPlayerNameScreen}
+		/>
+		<Stack.Screen name="SignUp/Complete" component={SignUpCompleteScreen} />
+	</Stack.Group>
+);
 
-export default SignUpNavigator;
+export default signUpNavigator;

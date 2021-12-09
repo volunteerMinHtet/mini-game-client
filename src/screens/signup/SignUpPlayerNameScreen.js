@@ -1,9 +1,12 @@
 import React from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { useDispatch } from "react-redux"; // hook for dispatch (trigger) action to redux reducer
+import { useSelector, useDispatch } from "react-redux"; // hook for dispatch (trigger) action to redux reducer
 
 import { toggleTheme } from "../../state/theme/themeActions"; // actions from theme actions
+import { singUp } from "../../state/player/playerActions"; // actions from player actions
+
 import { useThemedStyle } from "../../hooks/theme"; // custom hook for theme
+
 import { generatePlayerId, generatePlayerName } from "../../utils/playerUtils";
 
 import {
@@ -11,11 +14,19 @@ import {
 	SuccessSmallButton,
 } from "../../common/components/buttons";
 
-const SignUpPlayerNameScreen = ({ navigation }) => {
-	const dispatch = useDispatch(); // variable to dispatch actions
+const SignUpPlayerNameScreen = () => {
 	const style = useThemedStyle(styles); // add styles to custom theme hook
 
+	const dispatch = useDispatch(); // variable to dispatch actions
+
+	// const { player } = useSelector((state) => state);
 	const [playerName, setPlayerName] = React.useState("");
+
+	const canPass = Boolean(playerName);
+
+	// let toast = Toast.show("Request failed to send.", {
+	// 	duration: Toast.durations.LONG,
+	// });
 
 	function onPressGeneratePlayerName() {
 		setPlayerName(generatePlayerName());
@@ -25,8 +36,20 @@ const SignUpPlayerNameScreen = ({ navigation }) => {
 		dispatch(toggleTheme()); // dispatch action (trigger action to reducer to toggle theme)
 	}
 
-	function onPressCreate() {
-		navigation.navigate("SignUp/Complete");
+	async function onPressCreate() {
+		if (canPass) {
+			const playerId = generatePlayerId();
+			const data = {
+				player_id: playerId,
+				player_name: playerName,
+			};
+
+			dispatch(singUp(data));
+		} else {
+			console.log("Please select your player name.");
+		}
+
+		// navigation.navigate("SignUp/Complete");
 	}
 
 	return (

@@ -1,5 +1,6 @@
 import * as React from "react";
-import { SafeAreaView, Text, StyleSheet } from "react-native";
+import { SafeAreaView, View, Text, StyleSheet } from "react-native";
+import { useSelector } from "react-redux";
 
 import { useThemedStyle } from "../../hooks/theme"; // custom hook for theme
 
@@ -11,13 +12,22 @@ import {
 const SignUpCompleteScreen = () => {
 	const style = useThemedStyle(styles);
 
+	const { player } = useSelector((state) => state);
+
 	return (
 		<SafeAreaView style={style.container}>
 			<Text
 				style={style.headerText}
-			>{`ကြိုဆိုပါတယ် Clicker ကြီးရေ\nစပြီး Click နိုင်ပါပြီ ဗျာ။`}</Text>
+			>{`ကြိုဆိုပါတယ် Player ကြီးရေ\nစပြီး Play နိုင်ပါပြီ ဗျာ။`}</Text>
 
-			<Text style={style.subHeaderText}>{`ClickerID `}</Text>
+			<View style={style.centerBox}>
+				<Text
+					style={style.subHeaderText}
+				>{`Player ID - ${player.player_id}`}</Text>
+				<Text
+					style={style.subHeaderText}
+				>{`Player Name - ${player.player_name}`}</Text>
+			</View>
 		</SafeAreaView>
 	);
 };
