@@ -7,28 +7,28 @@ const UserInfoPopup = ({ visible, hideModal }) => {
 	const style = useThemedStyle(styles);
 
 	return (
-		<View style={style.centeredView}>
-			<Modal
-				animationType="slide"
-				transparent={true}
-				visible={visible}
-				onRequestClose={() => {
-					hideModal();
-				}}
-			>
-				<View style={style.centeredView}>
-					<View style={style.modalView}>
-						<Text style={style.modalText}>Hello World!</Text>
-						<Pressable
-							style={[style.button, style.buttonClose]}
-							onPress={() => hideModal()}
-						>
-							<Text style={style.textStyle}>Ok</Text>
-						</Pressable>
-					</View>
+		// <View style={style.centeredView}>
+		<Modal
+			animationType="slide"
+			transparent={true}
+			visible={visible}
+			onRequestClose={() => {
+				hideModal();
+			}}
+		>
+			<View style={style.centeredView}>
+				<View style={style.modalView}>
+					<Text style={style.modalText}>Hello World!</Text>
+					<Pressable
+						style={[style.button, style.buttonClose]}
+						onPress={() => hideModal()}
+					>
+						<Text style={style.textStyle}>Ok</Text>
+					</Pressable>
 				</View>
-			</Modal>
-		</View>
+			</View>
+		</Modal>
+		// </View>
 	);
 };
 

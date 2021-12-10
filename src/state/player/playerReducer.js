@@ -14,8 +14,6 @@ const defaultState = {
 	error: "",
 };
 
-console.log(defaultState);
-
 const playerReducer = (state = defaultState, action) => {
 	switch (action.type) {
 		case SIGN_UP_PLAYER:

@@ -1,4 +1,8 @@
+import { Dimensions } from "react-native";
 import { scale } from "react-native-size-matters";
+
+export const windowWidth = Dimensions.get("window").width;
+export const windowHeight = Dimensions.get("window").height;
 
 export const sizes = {
 	base: scale(8),
