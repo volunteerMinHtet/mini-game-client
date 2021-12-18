@@ -7,11 +7,11 @@ import { singUp } from "../../state/player/playerActions"; // actions from playe
 
 import { useThemedStyle } from "../../hooks/theme"; // custom hook for theme
 
-import { generatePlayerId, generatePlayerName } from "../../utils/playerUtils";
+import { generatePlayerId, generatePlayerName } from "../../utils/player";
 
 import {
-	PrimarySmallButton,
-	SuccessSmallButton,
+	PrimaryMediumButton,
+	SecondaryMediumButton,
 } from "../../common/components/buttons";
 
 const SignUpPlayerNameScreen = () => {
@@ -66,7 +66,7 @@ const SignUpPlayerNameScreen = () => {
 						<Text style={style.displayNameText}>{playerName}</Text>
 					</View>
 
-					<PrimarySmallButton
+					<PrimaryMediumButton
 						title={`နောက်တစ်ခု`}
 						iconName={`refresh`}
 						onPress={onPressGeneratePlayerName}
@@ -76,13 +76,13 @@ const SignUpPlayerNameScreen = () => {
 
 			<View style={style.footer}>
 				<View style={style.flexBox}>
-					<SuccessSmallButton
+					<SecondaryMediumButton
 						title={`ဖန်တီးပါ`}
 						iconName={`arrow-forward`}
 						onPress={onPressCreate}
 					/>
 
-					<SuccessSmallButton
+					<SecondaryMediumButton
 						title={`အရောင်ပြောင်းပါ`}
 						iconName={`arrow-forward`}
 						onPress={onPressToggleTheme}

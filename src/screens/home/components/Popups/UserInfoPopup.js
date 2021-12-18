@@ -3,7 +3,7 @@ import { Alert, Modal, View, Text, StyleSheet, Pressable } from "react-native";
 
 import { useThemedStyle } from "../../../../hooks/theme";
 
-const UserInfoPopup = ({ visible, hideModal }) => {
+export const UserInfoPopup = ({ visible, hideModal }) => {
 	const style = useThemedStyle(styles);
 
 	return (
@@ -31,8 +31,6 @@ const UserInfoPopup = ({ visible, hideModal }) => {
 		// </View>
 	);
 };
-
-export default UserInfoPopup;
 
 const styles = (theme) =>
 	StyleSheet.create({

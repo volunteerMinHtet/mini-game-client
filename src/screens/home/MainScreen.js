@@ -1,32 +1,42 @@
 import * as React from "react";
 import { SafeAreaView, View, Text, Image, StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
-
-import { io } from "socket.io-client"; // socket.io (client) library
+import { useSelector, useDispatch } from "react-redux";
 
 import { useThemedStyle } from "../../hooks/theme";
-import {
-	isShowedPlayerData,
-	finishShowedPlayerData,
-} from "../../utils/playerUtils";
+import { isShowedPlayerData, finishShowedPlayerData } from "../../utils/player";
 import {
 	playRewardedAd,
 	playInterstitialAd,
 	ShowBannerAd,
-} from "../../utils/admobUtils"; // Import Admob Format from custom utils
-
-import UserInfoPopup from "./components/Popups/UserInfoPopup";
+} from "../../utils/admob"; // Import Admob Format from custom utils
 import {
-	PrimarySmallButton,
-	SuccessSmallButton,
+	initiateSocket,
+	createRoom,
+	disconnectSocket,
+} from "../../services/socket"; // socket service
+import { setSocket, setRoom } from "../../state/player/playerActions"; // player actions
+
+import {
+	UserInfoPopup,
+	JoinRoomPopup,
+	WelcomePopup,
+} from "./components/Popups";
+import {
+	PrimaryMediumButton,
+	SecondaryMediumButton,
 } from "../../common/components/buttons";
 
 const MainScreen = ({ navigation }) => {
 	const style = useThemedStyle(styles);
 
+	const dispatch = useDispatch();
 	const { player } = useSelector((state) => state);
 
-	const [visible, setVisible] = React.useState(false);
+	const [playerInfoPopupVisible, setPlayerInfoPopupVisible] =
+		React.useState(false);
+	// const [welcomePopupVisible, setWelcomePopupVisible] = React.useState(false);
+	const [joinRoomPopupVisible, setJoinRoomPopupVisible] =
+		React.useState(false);
 
 	React.useEffect(() => {
 		let mounted = true;
@@ -41,28 +51,56 @@ const MainScreen = ({ navigation }) => {
 	}, []);
 
 	React.useEffect(() => {
-		const socket = io("http://10.0.2.2:5000", {
-			query: {
+		initiateSocket(
+			{
 				player_id: player.player_id,
 				player_name: player.player_name,
 			},
-		}); // create socket and send player
+			(error, data) => {
+				if (error) return console.log(error);
 
-		socket.connect();
+				dispatch(setSocket({ socket_id: data.socket_id }));
+			}
+		);
 
 		return () => {
-			socket.disconnect();
+			disconnectSocket();
+			console.log("disconnected", "main");
 		};
 	}, []);
 
-	function hideModal() {
-		setVisible(!visible);
+	function hidePlayerInfoPopup() {
+		setPlayerInfoPopupVisible(false);
 		finishShowedPlayerData();
+	}
+
+	function handleOnPressPlayBtn() {
+		// e.preventDefault();
+
+		createRoom((data) => {
+			dispatch(
+				setRoom({
+					room_id: data.room_id,
+					sockets: data.sockets,
+				})
+			);
+		});
 	}
 
 	return (
 		<SafeAreaView style={style.container}>
-			<UserInfoPopup visible={visible} hideModal={hideModal} />
+			<UserInfoPopup
+				visible={playerInfoPopupVisible}
+				hideModal={() => hidePlayerInfoPopup()}
+			/>
+			<JoinRoomPopup
+				visible={joinRoomPopupVisible}
+				hideModal={() => setJoinRoomPopupVisible(false)}
+			/>
+			{/* <WelcomePopup
+				visible={welcomePopupVisible}
+				hideModal={() => setWelcomePopupVisible(false)}
+			/> */}
 
 			<Image
 				style={style.logoImage}
@@ -78,17 +116,47 @@ const MainScreen = ({ navigation }) => {
 							source={require("../../../assets/images/snakes-and-ladders.png")}
 						/>
 					</View>
-					<PrimarySmallButton title={`ကစားမယ်`} />
+
+					<View
+						style={{
+							flexDirection: "column",
+							flexGrow: 1,
+							justifyContent: "space-evenly",
+						}}
+					>
+						{player.room.room_id ? (
+							<PrimaryMediumButton
+								title={`Room ကို ပြန်သွားမယ်`}
+								onPress={() =>
+									navigation.navigate("Home/Lobby", {
+										message: player.room.room_id,
+									})
+								}
+							/>
+						) : (
+							<PrimaryMediumButton
+								title={`Room ဖန်တီးမယ်`}
+								onPress={() => handleOnPressPlayBtn()}
+							/>
+						)}
+
+						{!player.room.room_id ? (
+							<PrimaryMediumButton
+								title={`Room သို့ ချိတ်ဆက်မယ်`}
+								onPress={() => setJoinRoomPopupVisible(true)}
+							/>
+						) : null}
+					</View>
 				</View>
 			</View>
 
 			<View style={style.footer}>
-				<SuccessSmallButton
+				<SecondaryMediumButton
 					title={`ကြော်ငြာ`}
 					onPress={() => playInterstitialAd()}
 				/>
 
-				<SuccessSmallButton title={`ပြင်ဆင်ပါ`} />
+				<SecondaryMediumButton title={`ပြင်ဆင်ပါ`} />
 			</View>
 		</SafeAreaView>
 	);

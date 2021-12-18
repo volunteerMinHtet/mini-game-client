@@ -16,10 +16,7 @@ import { playSound } from "./src/state/sound/soundActions"; // redux sound actio
 import { LOG_IN_PLAYER } from "./src/state/player/playerConstant";
 import { logIn } from "./src/state/player/playerActions";
 
-import {
-	checkPlayerFromLocal,
-	getPlayerFromLocal,
-} from "./src/utils/playerUtils";
+import { checkPlayerFromLocal, getPlayerFromLocal } from "./src/utils/player";
 
 // import RootNavigator from "./src/Navigator";
 import RootNavigator from "./src/screens/RootNavigator";

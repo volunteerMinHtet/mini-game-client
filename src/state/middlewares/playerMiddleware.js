@@ -1,6 +1,6 @@
-import { SIGN_UP_PLAYER } from "../player/playerConstant";
+import { SIGN_UP_PLAYER, SET_ROOM } from "../player/playerConstant";
 
-import { storePlayerToLocal } from "../../utils/playerUtils";
+import { storePlayerToLocal } from "../../utils/player";
 import { navigationRef } from "../../screens/RootNavigator";
 
 const playerMiddleware = (store) => (next) => (action) => {
@@ -18,6 +18,18 @@ const playerMiddleware = (store) => (next) => (action) => {
 						next(action);
 					})
 					.catch((e) => {});
+			}
+			break;
+
+		case SET_ROOM:
+			{
+				if (action.payload.room_id) {
+					next(action);
+
+					navigationRef.navigate("Home/Lobby", {
+						message: action.payload.room_id,
+					});
+				}
 			}
 			break;
 

@@ -4,11 +4,17 @@ import {
 	LOG_OUT_PLAYER,
 	SIGN_UP_PLAYER_ERROR,
 	LOG_IN_PLAYER_ERROR,
+	SET_ROOM,
+	REMOVE_ROOM,
+	SET_SOCKET,
+	UPDATE_ROOM_SOCKETS,
 } from "./playerConstant";
 
 const defaultState = {
 	player_id: "",
 	player_name: "",
+	socket_id: "",
+	room: { room_id: "", sockets: [] },
 	isLoggedIn: false,
 	isLoading: false,
 	error: "",
@@ -60,6 +66,41 @@ const playerReducer = (state = defaultState, action) => {
 				isLoggedIn: false,
 				isLoading: false,
 				error: action.payload.error,
+			};
+
+		case SET_SOCKET: {
+			return {
+				...state,
+				isLoading: false,
+				socket_id: action.payload.socket_id,
+			};
+		}
+
+		case SET_ROOM:
+			return {
+				...state,
+				isLoading: false,
+				room: {
+					room_id: action.payload.room_id,
+					sockets: action.payload.sockets,
+				},
+			};
+
+		case UPDATE_ROOM_SOCKETS:
+			return {
+				...state,
+				isLoading: false,
+				room: {
+					...state.room,
+					sockets: action.payload.sockets,
+				},
+			};
+
+		case REMOVE_ROOM:
+			return {
+				...state,
+				isLoading: false,
+				room: { room_id: "", sockets: [] },
 			};
 
 		default:

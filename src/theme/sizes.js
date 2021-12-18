@@ -15,4 +15,7 @@ export const sizes = {
 	border: scale(1),
 	border2: scale(3),
 	border3: scale(5),
+	box: scale(50),
+	box2: scale(75),
+	box3: scale(100),
 };
